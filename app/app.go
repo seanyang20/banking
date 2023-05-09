@@ -47,8 +47,8 @@ func Start() {
 	// implementing hexagonal architecture
 	// -------
 	router := mux.NewRouter()
-	//wiring
-	ch := CustomerHandlers{service.NewCustomerService(domain.NewCustomerRepositoryStub())}
+	//wiring (injected Database Adapter here (previously was stub))
+	ch := CustomerHandlers{service.NewCustomerService(domain.NewCustomerRepositoryDb())}
 	// define routes
 	router.HandleFunc("/customers", ch.getAllCustomers).Methods(http.MethodGet)
 
