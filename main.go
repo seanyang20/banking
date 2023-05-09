@@ -2,15 +2,16 @@ package main
 
 import (
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"log"
 	"net/http"
 )
 
 type Customer struct {
-	Name    string `json:"full_name"`
-	City    string `json:"city"`
-	Zipcode string `json:"zip_code"`
+	Name    string `json:"full_name" xml:"name"` // for encoding and decoding structs
+	City    string `json:"city" xml:"city"`
+	Zipcode string `json:"zip_code" xml:"zipcode"`
 }
 
 func main() {
@@ -24,6 +25,7 @@ func main() {
 
 }
 
+// ResponseWriter is what we are sending back to client
 func greet(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello World!")
 }
@@ -34,8 +36,16 @@ func getAllCustomers(w http.ResponseWriter, r *http.Request) {
 		{"Rob", "New Delhi", "110075"},
 	}
 
+	// Response header
 	w.Header().Add("Content-Type", "application/json")
 
-	// encodes all of our customers in JSON format
-	json.NewEncoder(w).Encode(customers)
+	if r.Header.Get("Content-Type") == "application/xml" {
+		// xml encoding
+		w.Header().Add("Content-Type", "application/xml")
+		xml.NewEncoder(w).Encode(customers)
+	} else {
+		// json encoding
+		w.Header().Add("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(customers)
+	}
 }
