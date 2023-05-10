@@ -2,7 +2,6 @@ package app
 
 import (
 	"encoding/json"
-	"encoding/xml"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -30,19 +29,31 @@ func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Reque
 	// 	{"Rob", "New Delhi", "110075"},
 	// }
 
-	customers, _ := ch.service.GetAllCustomer()
+	customers, err := ch.service.GetAllCustomer()
 
 	// Response header
 	w.Header().Add("Content-Type", "application/json")
 
-	if r.Header.Get("Content-Type") == "application/xml" {
-		// xml encoding
-		w.Header().Add("Content-Type", "application/xml")
-		xml.NewEncoder(w).Encode(customers)
+	// if r.Header.Get("Content-Type") == "application/xml" {
+	// 	// xml encoding
+	// 	w.Header().Add("Content-Type", "application/xml")
+	// 	xml.NewEncoder(w).Encode(customers)
+	// } else {
+	// 	// json encoding
+	// 	w.Header().Add("Content-Type", "application/json")
+	// 	json.NewEncoder(w).Encode(customers)
+	// }
+
+	if err != nil {
+		// w.Header().Add("Content-Type", "application/json") // setting error in json format
+		// w.WriteHeader(err.Code)
+		// json.NewEncoder(w).Encode(err.AsMessage())
+		writeResponse(w, err.Code, err.AsMessage())
 	} else {
-		// json encoding
-		w.Header().Add("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(customers)
+		// w.Header().Add("Content-Type", "application/json")
+		// w.WriteHeader(http.StatusOK)
+		// json.NewEncoder(w).Encode(customer)
+		writeResponse(w, http.StatusOK, customers)
 	}
 }
 
