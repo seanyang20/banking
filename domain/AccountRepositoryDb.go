@@ -1,10 +1,11 @@
 package domain
 
 import (
+	"strconv"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/seanyang20/banking/errs"
 	"github.com/seanyang20/banking/logger"
-	"strconv"
 )
 
 type AccountRepositoryDb struct {

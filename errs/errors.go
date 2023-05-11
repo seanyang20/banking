@@ -26,3 +26,11 @@ func NewUnexpectedError(message string) *AppError {
 		Code:    http.StatusInternalServerError,
 	}
 }
+
+// for validating incoming requests (POST - New Bank Account Part 2)
+func NewValidationError(message string) *AppError {
+	return &AppError{
+		Message: message,
+		Code:    http.StatusUnprocessableEntity,
+	}
+}
