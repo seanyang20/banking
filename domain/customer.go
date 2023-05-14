@@ -5,6 +5,7 @@ import (
 	"github.com/seanyang20/banking/errs"
 )
 
+// this is domain object
 type Customer struct {
 	Id          string `db:"customer_id"`
 	Name        string
